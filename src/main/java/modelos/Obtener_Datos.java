@@ -39,4 +39,51 @@ public class Obtener_Datos {
         return resultSet;
     }
     
+    
+    public String eliminar_datos(String id){
+        String resultado;
+        try{ 
+            String sql = "DELETE FROM employees WHERE employee_id="+id;
+            PreparedStatement ps;
+            ps = con.prepareStatement(sql);
+            ps.executeUpdate();
+            resultado = "exito";
+        } catch (SQLException e) {
+             resultado = "error";
+             System.out.println("El error es: "+e);
+        }
+        
+        return resultado;
+    }
+    
+    
+    public String update_datos(String id, String nombre, String apellido, String email, 
+            String telefono, String fecha, String Salario){
+        String resultado;
+        
+        try{
+            String sql = "UPDATE employees SET first_name=?,last_name=?,email=?,"
+                    + "phone_number=?,hire_date=?,salary=? "
+                    + "WHERE employee_id=?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1,String.valueOf(nombre));
+            st.setString(2,String.valueOf(apellido));
+            st.setString(3,String.valueOf(email));
+            st.setString(4,String.valueOf(telefono));
+            st.setString(5,String.valueOf(fecha));
+            st.setFloat(6,Float.parseFloat(Salario));
+            st.setInt(6,Integer.parseInt(id));
+            
+            resultado = "actualizado";
+               
+        } catch (SQLException e) {
+            resultado = "error";
+            System.out.println("Error al eliminar: "+e);
+            e.printStackTrace();
+        }  
+ 
+        return resultado;
+    }
+    
+    
 }

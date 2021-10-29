@@ -94,6 +94,46 @@ public class Inicio extends HttpServlet {
                 
                 response.getWriter().write(array_tabla_usuarios.toString());//reotorna datos
             break;
+            
+            
+        case "si_eliminalo":
+            JSONArray array_eliminado = new JSONArray();
+            JSONObject objeto_retornos = new JSONObject();
+                try {
+                    
+                    Obtener_Datos procesar = new Obtener_Datos();
+                    String resultado= procesar.eliminar_datos(request.getParameter("id"));
+                    objeto_retornos.put("resultado",resultado);
+                    objeto_retornos.put("proceso","actualizar");
+                    array_eliminado.put(objeto_retornos);
+                    
+                }catch(Exception e){
+                    Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, e);
+                }
+                response.getWriter().write(array_eliminado.toString());//reotorna datos
+            break;
+            
+            
+            
+         case "si_actualizalo":
+            JSONArray array_actualizado = new JSONArray();
+            JSONObject objeto_actualizado = new JSONObject();
+                try {
+                    
+                    Obtener_Datos procesar = new Obtener_Datos();
+                    String resultado= procesar.update_datos(request.getParameter("id"), request.getParameter("nombre"), 
+                        request.getParameter("apellido"), request.getParameter("email"), 
+                        request.getParameter("telefono"), request.getParameter("fecha"), 
+                        request.getParameter("salario"));
+                    objeto_actualizado.put("resultado",resultado);
+                    objeto_actualizado.put("proceso","actualizar");
+                    array_actualizado.put(objeto_actualizado);
+                    
+                }catch(Exception e){
+                    Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, e);
+                }
+                response.getWriter().write(array_actualizado.toString());//reotorna datos
+            break;
        }
         
         

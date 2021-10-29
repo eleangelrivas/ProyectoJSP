@@ -49,5 +49,12 @@
 
         <!-- Modernizr (browser feature detection library) -->
         <script src="js/vendor/modernizr.min.js"></script>
+        
+        <style>
+           
+            .swal2-popup {
+                font-size: 1.4rem !important; 
+            }
+        </style>
     </head>
     <body>

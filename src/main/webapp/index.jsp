@@ -98,8 +98,29 @@
         </div>
     </div>
     <!-- END Mini Top Stats Row -->
- 
-</div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="md_registro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
 
 
 
@@ -116,77 +137,8 @@
 <!-- Load and execute javascript code used only in this page -->
 <script src="js/pages/index.js"></script>
 <script>$(function(){ Index.init(); });</script>
-
+<!--script src="//code.jquery.com/jquery-1.11.0.min.js"></script-->
+<script src="modulos/index/funciones_index.js"></script>
  
-<script>
-    
- 
-    $(function(){//funcion anonima
-        
-        console.log("Jquery funcionando podemos ver"); 
-        $("#cargar_tabla").empty().append("<p>Hola como estas</p>");
-        cargar_datos();
-        
-        
-    });
-    
-    
-    function cargar_datos(){
-	mostrar_cargando("Procesando solicitud","Espere mientras se obtiene la información")
-	var datos = {"consultar_datos":"si_consultalos"};
-	$.ajax({
-            dataType:"json",
-            method:"POST",
-            url:"Inicio",
-            data:datos
-	}).done(function(json){
-            Swal.close();
-            console.log("datos consultados ",json);
-            //if (json[0]=="Exito") {
-            $("#cargar_tabla").empty().html(json[0]['la_tabla_html']);
-            $('#tabla_empleados').DataTable({
-                responsive: true,
-                pageLength:10,
-                lengthMenu:[[10,20,30,-1],[10,20,30,'Todo']],
-                "language":{
-                    "sSearch":"Buscar:",
-                    "oPaginate":{
-                        "sFirst":"Primero",
-                        "sLast":"Último",
-                        "sNext":"Siguiente",
-                        "sPrevious":"Anterior"
-                    }
-                }
-            });
-            //}
-	}).fail(function(){
-
-	}).always(function(){
-
-	})
-
-    }
-    
-    function mostrar_cargando(titulo,mensaje=""){
-	Swal.fire({
-	  title: titulo,
-	  html: mensaje,
-	  timer: 2000,
-	  timerProgressBar: true,
-	  didOpen: () => {
-	    Swal.showLoading()
-	     
-	  },
-	  willClose: () => {
-	     
-	  }
-	}).then((result) => {
-	  /* Read more about handling dismissals below */
-	  if (result.dismiss === Swal.DismissReason.timer) {
-	    console.log('I was closed by the timer')
-	  }
-	})
-    }
-</script>
 
 <%@ include file="inc/template_end.jsp" %> 
