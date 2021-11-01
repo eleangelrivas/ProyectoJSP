@@ -23,13 +23,14 @@ public class Obtener_Datos {
         this.con = cone.AbrirConexion();
     }
     
-    public ResultSet obtener_empleados(){
+    public ResultSet obtener_empleados(String id){
+        String where = (id=="") ? "":"WHERE employee_id="+id;
         Connection con = null; 
         ResultSet resultSet = null;
         try{ 
             Conexion cone = new Conexion();
             con = cone.AbrirConexion(); 
-            String sql = "SELECT * FROM employees";
+            String sql = "SELECT * FROM employees "+where;
             PreparedStatement ps = con.prepareStatement(sql); 
             resultSet = ps.executeQuery();
         } catch (Exception e) {
@@ -72,13 +73,41 @@ public class Obtener_Datos {
             st.setString(4,String.valueOf(telefono));
             st.setString(5,String.valueOf(fecha));
             st.setFloat(6,Float.parseFloat(Salario));
-            st.setInt(6,Integer.parseInt(id));
-            
+            st.setInt(7,Integer.parseInt(id));
+            st.executeUpdate();
+            st.close();
             resultado = "actualizado";
                
         } catch (SQLException e) {
             resultado = "error";
             System.out.println("Error al eliminar: "+e);
+            e.printStackTrace();
+        }  
+ 
+        return resultado;
+    }
+    
+    
+    public String insetar_datos(String nombre, String apellido, String email, 
+            String telefono, String fecha, String Salario){
+        String resultado;
+        
+        try{
+            String sql = "INSERT INTO employees(first_name,last_name,email,phone_number,hire_date,salary)values(?,?,?,?,?,?)";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1,String.valueOf(nombre));
+            st.setString(2,String.valueOf(apellido));
+            st.setString(3,String.valueOf(email));
+            st.setString(4,String.valueOf(telefono));
+            st.setString(5,String.valueOf(fecha));
+            st.setFloat(6,Float.parseFloat(Salario)); 
+            st.executeUpdate();
+            st.close();
+            resultado = "insertado";
+               
+        } catch (SQLException e) {
+            resultado = "error";
+            System.out.println("Error al guardar: "+e);
             e.printStackTrace();
         }  
  

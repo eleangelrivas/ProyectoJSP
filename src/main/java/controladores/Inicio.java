@@ -44,7 +44,7 @@ public class Inicio extends HttpServlet {
                 try {
                     
                     Obtener_Datos procesar = new Obtener_Datos();
-                    ResultSet resultSet = procesar.obtener_empleados();
+                    ResultSet resultSet = procesar.obtener_empleados("");
                     int i = 0;
                     String tabla= "";
                     tabla="<table id='tabla_empleados' class='table table-striped table-bordered'>";
@@ -115,15 +115,16 @@ public class Inicio extends HttpServlet {
             
             
             
+            
          case "si_actualizalo":
             JSONArray array_actualizado = new JSONArray();
             JSONObject objeto_actualizado = new JSONObject();
                 try {
                     
                     Obtener_Datos procesar = new Obtener_Datos();
-                    String resultado= procesar.update_datos(request.getParameter("id"), request.getParameter("nombre"), 
+                    String resultado= procesar.update_datos(request.getParameter("llave_persona"), request.getParameter("nombre"), 
                         request.getParameter("apellido"), request.getParameter("email"), 
-                        request.getParameter("telefono"), request.getParameter("fecha"), 
+                        request.getParameter("telefono"), request.getParameter("fecha1"), 
                         request.getParameter("salario"));
                     objeto_actualizado.put("resultado",resultado);
                     objeto_actualizado.put("proceso","actualizar");
@@ -133,6 +134,60 @@ public class Inicio extends HttpServlet {
                     Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, e);
                 }
                 response.getWriter().write(array_actualizado.toString());//reotorna datos
+            break;
+            
+            
+            
+            
+        case "si_registro":
+            JSONArray array_insertar = new JSONArray();
+            JSONObject objeto_insertar = new JSONObject();
+                try {
+                    
+                    Obtener_Datos procesar = new Obtener_Datos();
+                    String resultado= procesar.insetar_datos(request.getParameter("nombre"), 
+                        request.getParameter("apellido"), request.getParameter("email"), 
+                        request.getParameter("telefono"), request.getParameter("fecha1"), 
+                        request.getParameter("salario"));
+                    
+                    objeto_insertar.put("resultado",resultado);
+                    objeto_insertar.put("proceso","insertar");
+                    objeto_insertar.put("nombre","Elenilson");
+                    array_insertar.put(objeto_insertar);
+                    
+                }catch(Exception e){
+                    Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, e);
+                }
+                response.getWriter().write(array_insertar.toString());//reotorna datos
+            break;
+            
+        case "traer_especifico":
+            JSONArray array_traer = new JSONArray();
+            JSONObject objeto_traer = new JSONObject();
+            try{
+                Obtener_Datos procesar = new Obtener_Datos();
+                ResultSet resultSet = procesar.obtener_empleados(request.getParameter("employee_id"));
+                
+                int contador=0;
+                while(resultSet.next()){
+                    objeto_traer.put("employee_id",resultSet.getString("employee_id"));
+                    objeto_traer.put("first_name",resultSet.getString("first_name"));
+                    objeto_traer.put("last_name",resultSet.getString("last_name"));
+                    objeto_traer.put("email",resultSet.getString("email"));
+                    objeto_traer.put("phone_number",resultSet.getString("phone_number"));
+                    objeto_traer.put("hire_date",resultSet.getString("hire_date"));
+                    objeto_traer.put("salary",resultSet.getString("salary"));
+                    
+                }
+                objeto_traer.put("proceso","consultar_especifico"); 
+                array_traer.put(objeto_traer);
+            }catch(Exception e){
+                    Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, e);
+            }
+            
+            response.getWriter().write(array_traer.toString());//reotorna datos
+            
+            
             break;
        }
         
@@ -153,7 +208,7 @@ public class Inicio extends HttpServlet {
         sesion.setAttribute("usuario", "Ele Angel");
         try {
             Obtener_Datos datos = new Obtener_Datos();
-            ResultSet resultSet = datos.obtener_empleados();
+            ResultSet resultSet = datos.obtener_empleados("");
             while(resultSet.next()){
                 System.out.println("Nombre: "+resultSet.getString("first_name")+resultSet.getString("last_name"));
             }
