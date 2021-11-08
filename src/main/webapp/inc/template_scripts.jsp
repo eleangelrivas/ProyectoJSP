@@ -18,3 +18,32 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+<script>
+    function mostrar_cargando_global(titulo,mensaje=""){
+	Swal.fire({
+	  title: titulo,
+	  html: mensaje,
+	  timer: 2000,
+	  timerProgressBar: true,
+	  didOpen: () => {
+	    Swal.showLoading()
+	     
+	  },
+	  willClose: () => {
+	     
+	  }
+	}).then((result) => {
+	  /* Read more about handling dismissals below */
+	  if (result.dismiss === Swal.DismissReason.timer) {
+	    console.log('I was closed by the timer')
+	  }
+	})
+    }
+</script>

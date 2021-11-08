@@ -20,6 +20,7 @@ import modelos.Conexion;
 import modelos.Obtener_Datos;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -44,7 +45,7 @@ public class Inicio extends HttpServlet {
                 try {
                     
                     Obtener_Datos procesar = new Obtener_Datos();
-                    ResultSet resultSet = procesar.obtener_empleados("");
+                    ResultSet resultSet = procesar.obtener_empleados("","porid");
                     int i = 0;
                     String tabla= "";
                     tabla="<table id='tabla_empleados' class='table table-striped table-bordered'>";
@@ -142,13 +143,14 @@ public class Inicio extends HttpServlet {
         case "si_registro":
             JSONArray array_insertar = new JSONArray();
             JSONObject objeto_insertar = new JSONObject();
+            String contra = BCrypt.hashpw(request.getParameter("contrasenia"), BCrypt.gensalt(12));
                 try {
                     
                     Obtener_Datos procesar = new Obtener_Datos();
                     String resultado= procesar.insetar_datos(request.getParameter("nombre"), 
                         request.getParameter("apellido"), request.getParameter("email"), 
                         request.getParameter("telefono"), request.getParameter("fecha1"), 
-                        request.getParameter("salario"));
+                        request.getParameter("salario"),request.getParameter("usuario"),contra);
                     
                     objeto_insertar.put("resultado",resultado);
                     objeto_insertar.put("proceso","insertar");
@@ -166,7 +168,7 @@ public class Inicio extends HttpServlet {
             JSONObject objeto_traer = new JSONObject();
             try{
                 Obtener_Datos procesar = new Obtener_Datos();
-                ResultSet resultSet = procesar.obtener_empleados(request.getParameter("employee_id"));
+                ResultSet resultSet = procesar.obtener_empleados(request.getParameter("employee_id"),"porid");
                 
                 int contador=0;
                 while(resultSet.next()){
@@ -205,17 +207,29 @@ public class Inicio extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //super.doGet(req, resp); //To change body of generated methods, choose Tools | Templates.
         HttpSession sesion = req.getSession();
-        sesion.setAttribute("usuario", "Ele Angel");
-        try {
-            Obtener_Datos datos = new Obtener_Datos();
-            ResultSet resultSet = datos.obtener_empleados("");
-            while(resultSet.next()){
-                System.out.println("Nombre: "+resultSet.getString("first_name")+resultSet.getString("last_name"));
+//        sesion.invalidate();
+//        sesion.setAttribute("usuario", "Ele Angel");
+//        try {
+//            Obtener_Datos datos = new Obtener_Datos();
+//            ResultSet resultSet = datos.obtener_empleados("");
+//            while(resultSet.next()){
+//                System.out.println("Nombre: "+resultSet.getString("first_name")+resultSet.getString("last_name"));
+//            }
+            if (sesion.getAttribute("usuario")==null) {
+                System.out.println("Se vino el if");
+//                req.getRequestDispatcher("Login").forward(req, resp);
+                resp.sendRedirect("Login");
+                
+                return;
+            }else{
+                System.out.println("Se vino el else");
+                req.getRequestDispatcher("index.jsp").forward(req, resp);
+                
+                return;
             }
-            req.getRequestDispatcher("index.jsp").forward(req, resp);
-        } catch (Exception ex) {
-            Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        } catch (Exception ex) {
+//            Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
         //resp.sendRedirect("index.jsp");
         
