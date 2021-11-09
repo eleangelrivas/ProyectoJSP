@@ -31,7 +31,7 @@ public class Inicio extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
        
-        
+        response.setHeader("Access-Control-Allow-Origin", "*");//IMPORTANTE PARA ESCUCHAR PETICIONES EXTERNAS
         response.setContentType("application/json;charset=utf-8"); 
         //response.setContentType( "text/html; charset=iso-8859-1" );
 	PrintWriter out = response.getWriter();
